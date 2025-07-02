@@ -17,9 +17,9 @@ function HomePage() {
   }, []);
 
   return (
-    <div>
+    <div className="container mx-auto w-[90%]">
       {isLoading ? (
-        <div>
+        <div className="flex flex-wrap items-center justify-center gap-[10px]">
           {allProducts.map((product) => {
             return <CardComponent key={product.id} product={product} />;
           })}

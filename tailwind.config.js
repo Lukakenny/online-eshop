@@ -10,6 +10,7 @@ export default {
         textWhite: "#FFF",
         textDark: "#292D32",
         lightBlue: "#83D4E5",
+        grayColor: "#868686",
       },
     },
   },

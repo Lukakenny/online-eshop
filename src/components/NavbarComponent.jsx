@@ -11,12 +11,15 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
+import { Link } from "react-router-dom";
 
 function NavbarComponent() {
   return (
     <div className="bg-mainBlue h-full lg:h-[100px] flex items-center py-[10px]">
       <div className="container w-[90%] mx-auto flex items-center justify-between flex-col lg:flex-row gap-[10px]">
-        <img src={logo} alt="logo-image" />
+        <Link to="/">
+          <img src={logo} alt="logo-image" />
+        </Link>
 
         {/*search bar */}
         <div className="bg-textWhite rounded-[20px]">
