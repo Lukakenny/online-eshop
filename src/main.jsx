@@ -12,6 +12,7 @@ import store from "./store/store.js";
 import HomePage from "./pages/HomePage.jsx";
 import { ClerkProvider } from "@clerk/clerk-react";
 import SingleProductPage from "./pages/SingleProductPage.jsx";
+import CartPage from "./pages/CartPage.jsx";
 
 // Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/SingleProduct/:id",
         element: <SingleProductPage />,
+      },
+      {
+        path: "/cart",
+        element: <CartPage />,
       },
     ],
   },

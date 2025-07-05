@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductServices from "../services/ProductServices";
 import { Rating } from "@mui/material";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { CiHeart } from "react-icons/ci";
+import { useDispatch } from "react-redux";
+import { saveInCartAction } from "../store/cartSlice";
 
 function SingleProductPage() {
   const [singleProduct, setSingleProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [countProduct, setCountProduct] = useState(1);
+
+  //dispatch from redux
+  const dispatch = useDispatch();
 
   //3 stavri da uradimo
   //1.uzmi id
@@ -27,6 +32,11 @@ function SingleProductPage() {
 
   function handleImage(index) {
     setCurrentImage(index);
+  }
+
+  //funkcija koja salje proizvod u cart
+  function handleProductCart() {
+    dispatch(saveInCartAction(singleProduct));
   }
 
   return (
@@ -117,12 +127,14 @@ function SingleProductPage() {
             </div>
 
             <div className="flex items-center mt-[30px] gap-[20px]">
-              <button
+              <Link
+                to={"/cart"}
                 className="bg-mainYellow text-white px-[26px]
               py-[13px] rounded-lg"
+                onClick={handleProductCart}
               >
                 Add To Cart
-              </button>
+              </Link>
               <button>
                 <CiHeart size={30} />
               </button>

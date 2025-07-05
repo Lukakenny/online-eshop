@@ -12,8 +12,21 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function NavbarComponent() {
+  const [totalProductLS, setTotalProductLS] = useState(0);
+
+  const { totalProduct } = useSelector((state) => state.cartStore);
+
+  useEffect(() => {
+    let isTotal = JSON.parse(localStorage.getItem("cart_total"));
+    if (isTotal) {
+      setTotalProductLS();
+    }
+  }, [totalProduct]);
+
   return (
     <div className="bg-mainBlue h-full lg:h-[100px] flex items-center py-[10px]">
       <div className="container w-[90%] mx-auto flex items-center justify-between flex-col lg:flex-row gap-[10px]">
@@ -53,8 +66,12 @@ function NavbarComponent() {
           </div>
           <div className="flex items-center gap-[5px]">
             <CiShoppingCart color="white" size={25} />
-            <span>0</span>
-            <span className="text-textWhite text-[18px]">Cart</span>
+            <span className="bg-mainYellow text-textWhite rounded-full w-[20px] h-[20px] flex items-center justify-center">
+              {totalProduct}
+            </span>
+            <Link to="/cart" className="text-textWhite text-[18px]">
+              Cart
+            </Link>
           </div>
         </div>
       </div>
