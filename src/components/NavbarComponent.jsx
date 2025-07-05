@@ -23,7 +23,7 @@ function NavbarComponent() {
   useEffect(() => {
     let isTotal = JSON.parse(localStorage.getItem("cart_total"));
     if (isTotal) {
-      setTotalProductLS();
+      setTotalProductLS(isTotal);
     }
   }, [totalProduct]);
 
@@ -67,7 +67,7 @@ function NavbarComponent() {
           <div className="flex items-center gap-[5px]">
             <CiShoppingCart color="white" size={25} />
             <span className="bg-mainYellow text-textWhite rounded-full w-[20px] h-[20px] flex items-center justify-center">
-              {totalProduct}
+              {totalProductLS}
             </span>
             <Link to="/cart" className="text-textWhite text-[18px]">
               Cart
