@@ -5,10 +5,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteFromCartAction,
+  setPriceHandlerAction,
+} from "../store/cartSlice";
+import { useEffect, useState } from "react";
 
 function CartPage() {
-  let cart = JSON.parse(localStorage.getItem("cart_item"));
+  const [cartData, setCartData] = useState([]);
+  const { cart, totalPrice } = useSelector((state) => state.cartStore);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setCartData(JSON.parse(localStorage.getItem("cart_item")));
+  }, [cart]);
+
+  function handleRemoveProduct(product) {
+    dispatch(deleteFromCartAction(product));
+  }
 
   return (
     <div>
@@ -30,7 +45,7 @@ function CartPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {cart.map((product) => (
+                {cartData.map((product, index) => (
                   <TableRow
                     key={product.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -45,20 +60,51 @@ function CartPage() {
                     <TableCell align="left">${product.price}</TableCell>
                     <TableCell align="left">
                       <div className="flex items-center">
-                        <button className="px-[8px] py-[4px] bg-slate-300 text-[18px]">
+                        <button
+                          className="px-[8px] py-[4px] bg-slate-300 text-[18px]"
+                          onClick={() =>
+                            dispatch(
+                              setPriceHandlerAction({
+                                index,
+                                increment: -1,
+                                product,
+                              })
+                            )
+                          }
+                        >
                           -
                         </button>
                         <span className="px-[8px] py-[4px] bg-slate-300 text-[18px]">
                           {product.count}
                         </span>
-                        <button className="px-[8px] py-[4px] bg-slate-300 text-[18px]">
+                        <button
+                          className="px-[8px] py-[4px] bg-slate-300 text-[18px]"
+                          onClick={() => {
+                            if (product.count < product.stock) {
+                              dispatch(
+                                setPriceHandlerAction({
+                                  index,
+                                  increment: 1,
+                                  product,
+                                })
+                              );
+                            }
+                          }}
+                        >
                           +
                         </button>
                       </div>
                     </TableCell>
-                    <TableCell align="right">${product.cartTotal}</TableCell>
                     <TableCell align="right">
-                      <button className="text-red-400">Remove</button>
+                      ${Math.floor(product.cartTotal)}
+                    </TableCell>
+                    <TableCell align="right">
+                      <button
+                        className="text-red-400"
+                        onClick={() => handleRemoveProduct(product)}
+                      >
+                        Remove
+                      </button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -67,6 +113,7 @@ function CartPage() {
           </TableContainer>
           <div className="w-full lg:w-[30%]">
             <h2>CART TOTAL</h2>
+            <span>${totalPrice}</span>
           </div>
         </div>
       </div>

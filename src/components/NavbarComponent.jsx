@@ -19,11 +19,14 @@ function NavbarComponent() {
   const [totalProductLS, setTotalProductLS] = useState(0);
 
   const { totalProduct } = useSelector((state) => state.cartStore);
+  const { favoriteTotal } = useSelector((state) => state.favoriteStore);
 
   useEffect(() => {
     let isTotal = JSON.parse(localStorage.getItem("cart_total"));
     if (isTotal) {
       setTotalProductLS(isTotal);
+    } else {
+      setTotalProductLS(0);
     }
   }, [totalProduct]);
 
@@ -60,9 +63,11 @@ function NavbarComponent() {
           <div className="flex items-center gap-[5px]">
             <CiHeart color="white" size={25} />
             <span className="bg-mainYellow text-textWhite rounded-full w-[20px] h-[20px] flex items-center justify-center">
-              0
+              {favoriteTotal}
             </span>
-            <span className="text-textWhite text-[18px]">Favorite</span>
+            <Link to={"/favorite"} className="text-textWhite text-[18px]">
+              Favorite
+            </Link>
           </div>
           <div className="flex items-center gap-[5px]">
             <CiShoppingCart color="white" size={25} />

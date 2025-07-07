@@ -5,14 +5,17 @@ import { Rating } from "@mui/material";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { CiHeart } from "react-icons/ci";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { saveInCartAction } from "../store/cartSlice";
+import { updateFavoriteAction } from "../store/favoriteSlice";
 
 function SingleProductPage() {
   const [singleProduct, setSingleProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [countProduct, setCountProduct] = useState(1);
+  const [favoriteIdIcon, setFavoriteIdIcon] = useState(null);
+  const { allFavorite } = useSelector((state) => state.favoriteStore);
 
   //dispatch from redux
   const dispatch = useDispatch();
@@ -29,6 +32,19 @@ function SingleProductPage() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    if (allFavorite.length > 0) {
+      allFavorite.find((item) => {
+        if (item.id === singleProduct.id) {
+          setFavoriteIdIcon(item.id);
+          return;
+        }
+      });
+    } else {
+      setFavoriteIdIcon(null);
+    }
+  }, [allFavorite]);
 
   function handleImage(index) {
     setCurrentImage(index);
@@ -135,9 +151,24 @@ function SingleProductPage() {
               >
                 Add To Cart
               </Link>
-              <button>
-                <CiHeart size={30} />
-              </button>
+              <div className=" bg-[#EEE] p-[10px] rounded-full">
+                {favoriteIdIcon === parseInt(id) ? (
+                  <CiHeart
+                    size={30}
+                    color="red"
+                    onClick={() =>
+                      dispatch(updateFavoriteAction(singleProduct))
+                    }
+                  />
+                ) : (
+                  <CiHeart
+                    size={30}
+                    onClick={() =>
+                      dispatch(updateFavoriteAction(singleProduct))
+                    }
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
