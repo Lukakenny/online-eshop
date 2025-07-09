@@ -2,7 +2,7 @@ import { use, useEffect } from "react";
 import ProductServices from "../services/ProductServices";
 import { useDispatch, useSelector } from "react-redux";
 import { saveAllProductAction } from "../store/productSlice";
-import CardComponent from "../components/cardComponent";
+import CardComponent from "../components/CardComponent";
 
 function HomePage() {
   const { allProducts, isLoading, selectCategory, searchProduct } = useSelector(
