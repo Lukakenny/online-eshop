@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import CardComponent from "../components/cardComponent";
+import CardComponent from "../components/CardComponent";
 
 function FavoritePage() {
   const { allFavorite } = useSelector((state) => state.favoriteStore);
