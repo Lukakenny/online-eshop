@@ -10,12 +10,14 @@ import {
   deleteFromCartAction,
   setPriceHandlerAction,
 } from "../store/cartSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function CartPage() {
   const [cartData, setCartData] = useState([]);
+  const [activeCode, setActiveCode] = useState("");
   const { cart, totalPrice } = useSelector((state) => state.cartStore);
   const dispatch = useDispatch();
+  const couponRef = useRef();
 
   useEffect(() => {
     setCartData(JSON.parse(localStorage.getItem("cart_item")));
@@ -23,6 +25,13 @@ function CartPage() {
 
   function handleRemoveProduct(product) {
     dispatch(deleteFromCartAction(product));
+  }
+
+  //handle active coupon
+  function handleApplyCoupon() {
+    setActiveCode(couponRef.current.value);
+
+    couponRef.current.value = "";
   }
 
   return (
@@ -112,8 +121,35 @@ function CartPage() {
             </Table>
           </TableContainer>
           <div className="w-full lg:w-[30%]">
-            <h2>CART TOTAL</h2>
-            <span>${totalPrice}</span>
+            <h2 className="text-textWhite bg-mainBlue py-[20px] text-center">
+              CART TOTAL
+            </h2>
+            <span className="text-center text-[28px] font-extrabold">
+              Total Price: $
+              {activeCode === "Luca" ? totalPrice / 2 : totalPrice}
+            </span>
+
+            <div className=" flex flex-col gap-[20px] ">
+              <input
+                ref={couponRef}
+                type="text"
+                placeholder="Insert-coupon"
+                className="p-[10px] border border-grayColor rounded-lg placeholder:text-mainBlue outline-none mt-[25px]"
+                // value={activeCode}
+                // onChange={(e) => setActiveCode(e.target.value)}
+              />
+              <button
+                className={
+                  activeCode === "Luca"
+                    ? "bg-grayColor hover:bg-gray-500 line-through text-white px-[15px] py-[7px] rounded-lg transition-all duration-300 cursor-pointer"
+                    : "bg-mainBlue hover:bg-mainYellow text-white px-[15px] py-[7px] rounded-lg transition-all duration-300 cursor-pointer"
+                }
+                onClick={handleApplyCoupon}
+                disabled={activeCode === "Luca" ? true : false}
+              >
+                {activeCode === "Luca" ? "Coupon applied" : "Apply coupon"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

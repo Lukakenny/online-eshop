@@ -5,16 +5,32 @@ import { saveAllProductAction } from "../store/productSlice";
 import CardComponent from "../components/cardComponent";
 
 function HomePage() {
-  const { allProducts, isLoading } = useSelector((state) => state.productStore);
+  const { allProducts, isLoading, selectCategory, searchProduct } = useSelector(
+    (state) => state.productStore
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ProductServices.getAllProductsService()
-      .then((res) => {
-        dispatch(saveAllProductAction(res.data.products));
-      })
+    if (selectCategory) {
+      ProductServices.getAllProductByCategory(selectCategory)
+        .then((res) => {
+          dispatch(saveAllProductAction(res.data.products));
+        })
+        .catch((err) => console.log(err));
+    } else {
+      ProductServices.getAllProductsService()
+        .then((res) => {
+          dispatch(saveAllProductAction(res.data.products));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [selectCategory]);
+
+  useEffect(() => {
+    ProductServices.getSearchProduct(searchProduct)
+      .then((res) => dispatch(saveAllProductAction(res.data.products)))
       .catch((err) => console.log(err));
-  }, []);
+  }, [searchProduct]);
 
   return (
     <div className="container mx-auto w-[90%]">
